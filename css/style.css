@@ -179,12 +179,12 @@ body{
     text-align: center;
 }
 
-.des_block:nth-child(2){
+.des_block:nth-child(n){
   margin-top:30px;
 }
 
 .des_block{
-  padding:8px;
+  padding:8px 14px;
   background:#a8f9ea9c;
   border-radius:8px;
 }
