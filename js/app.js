@@ -1,3 +1,4 @@
+//選択式の設問群
 const quiz =[
   {
     id:1,
@@ -92,19 +93,21 @@ const quiz =[
   }
 ]
 
+//身長・体重の設問
 const quiz2 =   
     {
       id:11,
       question : "Q11: 身長と体重はいくつですか"
     }
   
-
+//年齢の設問
   const quiz3 = 
     {
       id:12,
       question : "Q12: 年齢はいくつですか"
     }
-  
+
+//年齢の設問のスコアシート   
   const age_list =[
     {  
     get_age:65, 
@@ -174,7 +177,7 @@ const quiz2 =
     age_score:21
   },{ 
     get_age:87,  
-    age_score:23
+    age_score:21
   },{ 
     get_age:88,  
     age_score:23
@@ -186,94 +189,142 @@ const quiz2 =
     age_score:24
   }
 ] 
- 
-  
 
+//-----------------------------------
+//---変数宣言------------------------
+//-----------------------------------
 
-
-
-
-const $btn_list = document.getElementById('button-list');
-const quizLength = quiz.length;
+//何番目の設問かのカウント
 let quizIndex = 0;
-let quiz2Index = 0;
+//点数の合計値
 let total = 0;
+
+//-----------------------------------
+//---HTMLオブジェクトの取得-----------
+//-----------------------------------
+
+//身長・体重設問時使用。選択式設問欄を消す。次へボタンを設置。
+const $btn_list = document.getElementById('button-list');
+
+//選択式設問欄数を取得
+const quizLength = quiz.length;
+
+//回答ボタンを配列で取得
 const $button = document.getElementsByTagName('button');
-let buttonLength = $button.length;
+//回答ボタン数を取得
+let $buttonLength = $button.length;
+
+//年齢のselectボックスを取得
 const $age = document.getElementById('age');
-const $result = document.getElementById('result');
+
+//結果ページへ遷移するためのボタンを取得
 const $result_btn = document.getElementById('result_btn');
+
+//結果ページへ移動するボタンのダミーのdivタグ。年齢設問時に表示する
 const $dummyForm = document.getElementById('dummy-form');
+
+//結果ページへ移動するボタンのダミーのinputタグ。年齢設問時に表示する
 const $dummyBtn = document.getElementById('dummy-btn');
+
+//身長のselectボックスを取得
 const $get_height = document.getElementById('height');
+
+//体重のselectボックスを取得
 const $get_weight = document.getElementById('weight');
 
-const $input2 = document.createElement('input');
-  $input2.setAttribute("type","text");
-  $input2.setAttribute("placeholder","例：体重をキログラムでご入力ください");
-
-
-const $input1 = document.createElement('input');
-  $input1.setAttribute("type","text");
-  $input1.setAttribute("placeholder","例：身長をメートルでご入力ください");
-
+//身長・体重入力後次の設問へ進むためのボタンを生成
 const $next_btn = document.createElement('div');
 $next_btn.setAttribute("class","next_btn");
-const $btn_next_text = document.createTextNode('次へ');
-$next_btn.appendChild($btn_next_text);
+$next_btn.textContent = '次へ';
 
 
 
-//クイズ問題文、選択肢を定義
+//--------------------------------------------------
+//setupQUizの定義（問題文、選択肢を定義）-----------
+//--------------------------------------------------
 const setupQuiz = () =>{
+  //設問欄にquizオブジェクトのquestion情報をいれる
   document.getElementById('js-question').textContent = quiz[quizIndex].question;
-  let buttonIndex = 0;
-  while (buttonIndex < buttonLength){
-    $button[buttonIndex].textContent = quiz[quizIndex].answers[buttonIndex];
-    buttonIndex++;
+  
+  //以下、回答ボタンの生成処理
+  //回答ボタンのインデックスを初期化
+  let $buttonIndex = 0;
+  
+  //変数$buttonLengthに格納しているbuttonタグの数だけボタンを表示する。
+  while ($buttonIndex < $buttonLength){
+    //quizオブジェクトのanswersにある値を、buttonタグへ格納
+    $button[$buttonIndex].textContent = quiz[quizIndex].answers[$buttonIndex];
+    $buttonIndex++;
   }
 }
 
+//---------------------------
+//setupQuizの実行-----------
+//---------------------------
 setupQuiz();
 
+
+//--------------------------------------------------
+//setupQUiz2の定義(身長・体重の設問文・回答欄を定義)----
+//--------------------------------------------------
 const setupQuiz2 = () =>{
+  //設問欄にquiz2オブジェクトのquestion情報をいれる
   document.getElementById('js-question').textContent = quiz2.question;
+  //身長・体重のselectボックスを表示
   $get_height.style.display = 'block';
   $get_weight.style.display = 'block';
+  //入力後、次の質問へ進めるボタンを生成
   $btn_list.appendChild($next_btn);
+  //選択式設問の回答ボタンを非表示
   $button[1].style.display = 'none';
   $button[0].style.display = 'none';
 
   next_click();
 }
 
+//--------------------------------------------------
+//setupQUiz3の定義(年齢の設問文を定義)----
+//--------------------------------------------------
 const setupQuiz3 = () =>{
+  //設問欄にquiz2オブジェクトのquestion情報をいれる
   document.getElementById('js-question').textContent = quiz3.question;
+  //身長・体重のselectボックスを非表示
   $get_height.style.display = 'none';
   $get_weight.style.display = 'none';
+  //次へボタンの表示を非表示
   $next_btn.style.display = 'none';
+  //年齢のselectボックスを表示
   $age.style.display = 'block';
+  //ダミーの次ページへ遷移するボタンを表示
   $dummyForm.style.display = 'block';
+
   result_click();
 }
 
 
-
-
-//eはイベント（今回はクリックイベント）でそのオブジェクトのtarget（今クリックされたボタンを表す）を指す
+//------------------------------------------------------------
+//clickHandlerの定義（選択式設問で回答をクリックした時の処理）
+//------------------------------------------------------------
  const clickHandler = (e)=>{
+    //クリックされたターゲットのオブジェクトのクラスリストにclick-hilightクラスを追加
+    //クリックした時に水色になる処理
     e.target.classList.add('click-hilight');
     new Promise((result)=>{
+      //クリックしてから、100ミリ秒後にclick-hilightクラスを外され、色が戻る
       setTimeout(()=>{
         e.target.classList.remove('click-hilight');
         result();
       },100);
+      //result()が実行されthen()の処理に移る
     }).then(()=>{
+      //もし、クリックしたオブジェクトのテクスト情報が、quizオブジェクトのcorrect情報と同じ場合
       if(quiz[quizIndex].correct === e.target.textContent){
+        //quizオブジェクトのscoreをtotalへ加算する。
         total += quiz[quizIndex].score;
-        console.log(total);
       }
+       //回答した数をカウントする
        quizIndex++;
+       //もし設問数がquizIndex(回答数)と比べて少なければ選択式問題を継続。そうでなければ身長体重設問へ。
        if(quizIndex < quizLength){
          setupQuiz();
        }else{
@@ -283,10 +334,13 @@ const setupQuiz3 = () =>{
  }
 
 
-
- //クリックしたら正誤判定
+ //------------------------------------------------------------------
+ //clickHandlerの起動
+ //------------------------------------------------------------------
+ //ボタンの数ぶんのクリックイベントの記述を、while文でまとめた
  let handleIndex = 0;
- while(handleIndex < buttonLength){
+ while(handleIndex < $buttonLength){
+  //クリックされたボタンのオブジェクト情報でclickHandlerを実行
    $button[handleIndex].addEventListener('click',(e)=>{     
     clickHandler(e);
  });
@@ -294,34 +348,55 @@ const setupQuiz3 = () =>{
  }
 
 
-
+ //------------------------------------------------------------------
+ //次へボタンの定義
+ //------------------------------------------------------------------
  const next_click = () =>{
+  //次へボタンが押されたら
    $next_btn.addEventListener('click',()=>{
+    //もし身長と体重の値がどちらもnullではない場合
     if($get_height.value !== 'null' && $get_weight.value !== 'null'){
+      //取得した身長・体重の値を取得
       const height = $get_height.value; 
       const weight = $get_weight.value;
-      const bmi = weight / height /height;
+      //小数点第2以下を四捨五入。roundメソッドは小数点を四捨五入するので小数点第2位を四捨五入できるよう調整
+      const $actbmi = weight / height / height;
+      const bmi = Math.round($actbmi * 10)/10
+      //もしBMIが18.5以下ならtotalへ加算
       if(bmi < 18.5){
         total += 3;       
       }
+      //setupQUiz3の実行
       setupQuiz3(); 
+    //もし、身長・体重のどちらかの値にnullがはいっていたら  
     }else{
+      //ウィンドウアラートを出す
       window.alert('値を選択してください');
-      console.log($get_height.value);
-      console.log($get_weight.value);
     }
    });
  }
 
+ 
+//------------------------------------------------------------------
+ //結果ページボタンの処理
+ //------------------------------------------------------------------
  const result_click = () => {
+  //ダミーの「元気度を測定」ボタンが押されたら実行
   $dummyBtn.addEventListener('click',(e)=>{
+    //もし年齢の値がnullだったら
     if($age.value === 'null' ){
+      //ウィンドウアラートを表示
       window.alert('年齢を選択してください');
     }else{
+      //年齢が選択されていたら該当するスコアをtotalへ格納
       total += age_list[$age.value].age_score;
+      //total変数に格納されている値をgetTotal変数として、セッションストレージへセットする
       sessionStorage.setItem('getTotal',total);
+      //selectボックスの値をint型へ変更
       actAge = parseInt($age.value);
+      //actAgeに65を加えることで年齢が割り出される。セッションストレージへセットする。
       sessionStorage.setItem('getAge',actAge + 65);
+      //ダミーではなく非表示になっている画面遷移ボタンを間接的にクリック
       $result_btn.click();
     }
    });

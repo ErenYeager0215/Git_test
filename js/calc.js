@@ -1,9 +1,11 @@
+//前のページで取得し、セッションストレージにいれた得点と年齢を取得
 const total = sessionStorage.getItem('getTotal');
 const age = sessionStorage.getItem('getAge');
 
 console.log(total);
 console.log(age);
 
+//年齢の平均点
 const ageTable = {
   65:3.1,
   66:3.2,
@@ -33,6 +35,7 @@ const ageTable = {
   90:33.7,
 }
 
+//要支援・要介護リスク評価尺度
 const riskTable = {
   0:1,
   1:1,
@@ -85,30 +88,47 @@ const riskTable = {
   48:73,
 }
 
+// ----------------------------
+// 変数宣言
+// ---------------------------
 let yourAveScore = 0;
 let yourRisk = 0;
-
-
-const genkidoCalc = () =>{
-  for(key1 in ageTable){
-    if(key1 === age ){
-      yourAveScore = ageTable[key1];
-    }
-  }
-
-  return round = (Math.round((48 - total)/(48 - yourAveScore)*1000))/10;
-}
-
-genkido = genkidoCalc()
-
-document.getElementById('scoreResult').textContent = 'あなたの元気度は'+ genkido + 'スマイルです';
-
 const $over104 = document.getElementById('over104')
 const $under84 = document.getElementById('under84');
 const $85To103 = document.getElementById('85To103');
 
 
+// ---------------------------------
+//genkidoCalcの定義（元気度の計算を定義）
+// ---------------------------------
+const genkidoCalc = () =>{
+  //年齢の平均点を取得
+  for(key1 in ageTable){
+    //取得した年齢がageTableのキー値と同じ場合
+    if(key1 === age ){
+      //キーに対する値を格納
+      yourAveScore = ageTable[key1];
+    }
+  }
+  //元気度の算出式実行後に小数点第二位を四捨五入
+  return round = (Math.round((48 - total)/(48 - yourAveScore)*1000))/10;
+}
+
+//----------------------------------
+//genkidoCalcの実行（元気度の取得）
+//-----------------------------------
+genkido = genkidoCalc()
+
+//元気度を画面に表示
+document.getElementById('scoreResult').textContent = 'あなたの元気度は'+ genkido + 'スマイルです';
+
+
+
+//----------------------------------------------------------------
+//resultTextの定義（geikidoの数値に応じて条件分岐を定義)-----------
+//----------------------------------------------------------------
 const resultText= (genkido) =>{
+  //条件が一致したときにdisplay:blockになる
   if(genkido >= 104){        
     $over104.style.display = 'block';
 }else if(genkido <= 84){   
@@ -118,18 +138,28 @@ const resultText= (genkido) =>{
 }
 }
 
+//--------------------------------------------
+//resultTextの実行-----------
+//--------------------------------------------
 resultText(genkido);
 
-
-
-
+//----------------------------------------------------------------
+//riskCalcの定義（要支援・要介護リスク評価尺度の処理)-----------
+//----------------------------------------------------------------
  const riskCalc = () =>{
    for(key2 in riskTable ){
+    //もしtotalとリスク評価尺度のキーが一致したら
      if(key2 === total){
+      //そのキーに対応する値を返す
      return riskTable[key2];
     }
   }
 }
 
+//--------------------------------------------
+//riskCalcの実行し、リスク尺度を取得-----------
+//--------------------------------------------
 yourRisk = riskCalc();
+
+//リスク評価尺度を画面に表示
 document.getElementById('riskResult').textContent = '3年後の要支援・要介護リスク尺度は'+ yourRisk + '％です';

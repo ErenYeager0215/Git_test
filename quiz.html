@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quizapp</title>
+  <title>元気度チェック</title>
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/style.css">
 </head>  
@@ -222,14 +222,15 @@
       <button  type="button" class=" btn btn-primary"></button>
     </div>
     
-
+    <!-- Formボタンだと、値未入力の時の警告文がでる前に画面遷移する -->
+    <!-- 画面遷移まえに分岐処理をするために -->
     <!-- ダミーでフォームを作成 -->
     <div id="dummy-form" style="display:none; margin-top:30px; text-align:center;">
         <input id="dummy-btn" type="submit" value="元気度を測定！">
     </div>      
 
   <!-- ダミーフォームで条件をクリアした場合こっちのフォームから画面遷移する -->
-    <form style="display:none; margin-top:30px; text-align:center;" id="result"  action="result.html">
+    <form style="display:none;"  action="result.html">
       <input id="result_btn" type="submit" value="元気度を測定！">
     </form> 
    
